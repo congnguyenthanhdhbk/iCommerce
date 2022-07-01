@@ -8,3 +8,7 @@ info:
   name: ${project.name}
   description: ${project.description}
   version: ${project.version}
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
