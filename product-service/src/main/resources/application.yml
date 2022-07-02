@@ -1,0 +1,18 @@
+server:
+  port: ${CONFIG_PORT:8082}
+info:
+  name: ${project.name}
+  description: ${project.description}
+  version: ${project.version}
+eureka:
+  client:
+    service-url:
+      defaultZone: ${REGISTRY_URL:http://localhost:8761/eureka/}
+    healthcheck:
+      enabled: true
+spring:
+  application:
+    name: product-service
+  data:
+    mongodb:
+      uri: ${MONGO_URI:mongodb://localhost:27017/product}
