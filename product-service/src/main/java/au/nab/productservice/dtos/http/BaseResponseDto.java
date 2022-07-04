@@ -1,4 +1,4 @@
-package au.nab.productservice.dtos;
+package au.nab.productservice.dtos.http;
 
 import lombok.*;
 
@@ -7,8 +7,8 @@ import lombok.*;
 @Builder
 @Getter
 @Setter
-public class BaseResponseDto<T> {
+public class BaseResponseDto {
     private int code;
     private String message;
-    private T data;
+    private ProductResponse data;
 }

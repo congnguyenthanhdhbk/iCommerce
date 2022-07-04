@@ -1,14 +1,13 @@
 package au.nab.productservice.controller.impl;
 
 import au.nab.productservice.controller.ProductController;
-import au.nab.productservice.dtos.BaseResponseDto;
+import au.nab.productservice.dtos.http.BaseResponseDto;
 import au.nab.productservice.dtos.ProductDto;
-import au.nab.productservice.dtos.ReviewDto;
+import au.nab.productservice.dtos.http.ProductResponse;
 import au.nab.productservice.entities.Product;
 import au.nab.productservice.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,13 +22,14 @@ public class ProductControllerImpl implements ProductController {
     }
 
     @Override
-    public ResponseEntity<BaseResponseDto<Product>> addProduct(@RequestBody() ProductDto product) {
+    public ResponseEntity<BaseResponseDto> addProduct(@RequestBody() ProductDto product) {
         try {
+            final ProductResponse response = productService.addProduct(product);
             return ResponseEntity.ok(BaseResponseDto
-                    .<Product>builder()
+                    .builder()
                             .code(HttpStatus.CREATED.value())
                             .message(HttpStatus.CREATED.getReasonPhrase())
-                            .data(productService.addProduct(product))
+                            .data(response)
                     .build());
         } catch (Exception e) {
             return ResponseEntity.of(Optional.of(BaseResponseDto
@@ -38,26 +38,6 @@ public class ProductControllerImpl implements ProductController {
                             .message(e.getMessage())
                             .data(null)
                     .build()));
-        }
-    }
-
-    @Override
-    public ResponseEntity<BaseResponseDto<Product>> reviewProduct(@RequestBody() ReviewDto review,
-                                                                  @PathVariable("id") String id) {
-        try {
-            return ResponseEntity.ok(BaseResponseDto.<Product>builder()
-                            .code(HttpStatus.OK.value())
-                            .message(HttpStatus.OK.getReasonPhrase())
-                            .data(productService.reviewProduct(review, id))
-                    .build());
-        } catch (Exception e) {
-            return ResponseEntity.of(Optional.of(
-                    BaseResponseDto.<Product>builder()
-                            .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                            .data(null)
-                            .message(e.getMessage())
-                            .build()
-            ));
         }
     }
 }

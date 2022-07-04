@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.data.annotation.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
@@ -18,25 +19,18 @@ import java.util.List;
 @NoArgsConstructor
 public class Product {
     @Id
-    String id;
+    private String id;
     private String name;
     private String description;
-    private String sku;
-    private List<String> color;
+    private List<String> colors;
+    private String brand;
+    private List<String> categories;
+    private long quantity;
+    private BigDecimal price;
 
-    private Brand brand;
-
-    private List<Category> categories;
-    private Inventory inventory;
-    private List<Review> review;
-
-    @CreatedDate
     private LocalDateTime createdAt = LocalDateTime.now(ZoneOffset.UTC);
-    @LastModifiedDate
     private LocalDateTime updatedAt = LocalDateTime.now(ZoneOffset.UTC);
-    @CreatedBy
     private String createdBy = User.OPERATOR;
-    @LastModifiedBy
     private String updatedBy = User.OPERATOR;
     private LocalDateTime deletedAt;
 }
