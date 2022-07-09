@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ProductService {
-    ProductResponse addProduct(final ProductDto product);
+    Optional<ProductResponse> addProduct(final ProductDto product);
 
     /**
      * @param query custom query

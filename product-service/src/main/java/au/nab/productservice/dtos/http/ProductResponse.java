@@ -27,17 +27,4 @@ public class ProductResponse {
         this.quantity = product.getQuantity();
         this.price = product.getPrice();
     }
-
-    public Product toEntity() {
-        return Product
-                .builder()
-                .name(this.name)
-                .description(this.description)
-                .quantity(this.quantity)
-                .colors(this.colors)
-                .price(this.price)
-                .brand(this.brand)
-                .categories(this.categories)
-                .build();
-    }
 }

@@ -2,7 +2,6 @@ package au.nab.productservice.controller.impl;
 
 import au.nab.productservice.controller.ProductController;
 import au.nab.productservice.dtos.FilterCondition;
-import au.nab.productservice.dtos.http.BaseResponseDto;
 import au.nab.productservice.dtos.ProductDto;
 import au.nab.productservice.dtos.http.PageResponse;
 import au.nab.productservice.dtos.http.ProductResponse;
@@ -35,23 +34,10 @@ public class ProductControllerImpl implements ProductController {
     }
 
     @Override
-    public ResponseEntity<BaseResponseDto> addProduct(@RequestBody() ProductDto product) {
-        try {
-            final ProductResponse response = productService.addProduct(product);
-            return ResponseEntity.ok(BaseResponseDto
-                    .builder()
-                            .code(HttpStatus.CREATED.value())
-                            .message(HttpStatus.CREATED.getReasonPhrase())
-                            .data(response)
-                    .build());
-        } catch (Exception e) {
-            return ResponseEntity.of(Optional.of(BaseResponseDto
-                    .<Product>builder()
-                            .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                            .message(e.getMessage())
-                            .data(null)
-                    .build()));
-        }
+    public ResponseEntity<ProductResponse> addProduct(@RequestBody() ProductDto product) {
+        final Optional<ProductResponse> response = productService.addProduct(product);
+        return response.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.internalServerError().build());
     }
 
     /**

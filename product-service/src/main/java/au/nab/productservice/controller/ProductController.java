@@ -1,6 +1,5 @@
 package au.nab.productservice.controller;
 
-import au.nab.productservice.dtos.http.BaseResponseDto;
 import au.nab.productservice.dtos.ProductDto;
 import au.nab.productservice.dtos.http.PageResponse;
 import au.nab.productservice.dtos.http.ProductResponse;
@@ -13,7 +12,7 @@ import java.util.List;
 @RequestMapping(value = "/v1/products")
 public interface ProductController {
     @PostMapping()
-    ResponseEntity<BaseResponseDto> addProduct(final ProductDto product);
+    ResponseEntity<ProductResponse> addProduct(final ProductDto product);
     @GetMapping()
     ResponseEntity<PageResponse<Product>> getSearchCriteriaPage(
             @RequestParam(value = "page", defaultValue = "0") int page,

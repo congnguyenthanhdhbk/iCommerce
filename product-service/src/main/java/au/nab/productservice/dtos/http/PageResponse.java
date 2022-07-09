@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PageResponse<T> {
+    private List<T> items;
     private int totalPages;
     private long totalItems;
     private int currentPage;
@@ -20,8 +21,6 @@ public class PageResponse<T> {
     private boolean last;
     private int itemsPerPage;
     private int pageSize;
-
-    private List<T> items;
 
     public void setPageStats(Page pg, List<T> elts) {
         first = pg.isFirst();

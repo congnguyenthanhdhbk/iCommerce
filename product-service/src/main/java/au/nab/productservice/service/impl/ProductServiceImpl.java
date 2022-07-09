@@ -21,10 +21,10 @@ public class ProductServiceImpl implements ProductService {
         this.productRepository = productRepository;
     }
 
-    public ProductResponse addProduct(final ProductDto product) {
+    public Optional<ProductResponse> addProduct(final ProductDto product) {
         final Product entity = product.toEntity();
         final Product savedProduct = productRepository.insert(entity);
-        return new ProductResponse(savedProduct);
+        return Optional.of(new ProductResponse(savedProduct));
     }
 
     /**
