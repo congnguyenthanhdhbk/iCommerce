@@ -6,7 +6,12 @@ import au.nab.productservice.dtos.http.ProductResponse;
 import au.nab.productservice.entities.Product;
 import au.nab.productservice.repository.ProductRepository;
 import au.nab.productservice.service.ProductService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -23,5 +28,21 @@ public class ProductServiceImpl implements ProductService {
         final Product entity = productConverter.convertToEntity(product);
         final Product savedProduct = productRepository.insert(entity);
         return productConverter.convertToDto(savedProduct);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Product> getAll(final Query query) {
+        return productRepository.findAll(query);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Page<Product> getPage(final Query query, final Pageable pageable) {
+        return productRepository.findAll(query, pageable);
     }
 }
