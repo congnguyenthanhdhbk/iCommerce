@@ -1,5 +1,6 @@
 package au.nab.productservice.dtos;
 
+import au.nab.productservice.entities.Product;
 import lombok.*;
 
 import javax.validation.constraints.Max;
@@ -8,10 +9,10 @@ import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 
-@AllArgsConstructor
-@Builder
+@Data
 @Getter
 @Setter
+@AllArgsConstructor
 public class ProductDto {
     @NotBlank(message = "product name must not be null or empty")
     private final String name;
@@ -28,4 +29,17 @@ public class ProductDto {
     private final long quantity;
     @NotBlank(message = "price must not be null or empty")
     private final BigDecimal price;
+
+    public Product toEntity() {
+        return Product
+                .builder()
+                .name(this.name)
+                .description(this.description)
+                .quantity(this.quantity)
+                .colors(this.colors)
+                .price(this.price)
+                .brand(this.brand)
+                .categories(this.categories)
+                .build();
+    }
 }

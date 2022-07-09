@@ -15,7 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -61,7 +63,11 @@ public class ProductControllerImpl implements ProductController {
      * @return PageResponse<Product>
      */
     @Override
-    public ResponseEntity<PageResponse<Product>> getSearchCriteriaPage(int page, int size, String filterOr, String filterAnd, String orders) {
+    public ResponseEntity<PageResponse<Product>> getSearchCriteriaPage(@RequestParam(value = "page", defaultValue = "0") int page,
+                                                                       @RequestParam(value = "size", defaultValue = "20") int size,
+                                                                       @RequestParam(value = "filterOr", required = false) String filterOr,
+                                                                       @RequestParam(value = "filterAnd", required = false) String filterAnd,
+                                                                       @RequestParam(value = "orders", required = false) String orders) {
         PageResponse<Product> response = new PageResponse<>();
 
         Pageable pageable = filterBuilderService.getPageable(size, page, orders);
@@ -84,15 +90,31 @@ public class ProductControllerImpl implements ProductController {
      * @return list of Product
      */
     @Override
-    public ResponseEntity<List<Product>> getAllSearchCriteria(String filterOr, String filterAnd) {
+    public ResponseEntity<List<Product>> getAllSearchCriteria(@RequestParam(value = "filterOr", required = false) String filterOr,
+                                                              @RequestParam(value = "filterAnd", required = false) String filterAnd) {
         GenericFilterCriteriaBuilder filterCriteriaBuilder = new GenericFilterCriteriaBuilder();
 
         List<FilterCondition> andConditions = filterBuilderService.createFilterCondition(filterAnd);
         List<FilterCondition> orConditions = filterBuilderService.createFilterCondition(filterOr);
 
         Query query = filterCriteriaBuilder.addCondition(andConditions, orConditions);
-        List<Product> employees = productService.getAll(query);
+        List<Product> products = productService.getAll(query);
 
-        return new ResponseEntity<>(employees, HttpStatus.OK);
+        return new ResponseEntity<>(products, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<ProductResponse> getProductById(@PathVariable("id") final String id) {
+        final Optional<Product> product = productService.getProductById(id);
+        return product.map(value -> ResponseEntity.ok(new ProductResponse(value)))
+                .orElseGet(() -> ResponseEntity.internalServerError().build());
+    }
+
+    @Override
+    public ResponseEntity<ProductResponse> updateProduct(@PathVariable("id") String id,
+                                                 @RequestBody() ProductDto productDto) {
+        final Optional<Product> product = productService.updateProduct(id, productDto);
+        return product.map(value -> ResponseEntity.ok(new ProductResponse(value)))
+                .orElseGet(() -> ResponseEntity.internalServerError().build());
     }
 }

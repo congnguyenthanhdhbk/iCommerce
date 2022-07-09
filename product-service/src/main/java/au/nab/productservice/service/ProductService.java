@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductService {
     ProductResponse addProduct(final ProductDto product);
@@ -25,4 +26,6 @@ public interface ProductService {
      * @return Page of entity Product
      */
     Page<Product> getPage(final Query query, final Pageable pageable);
+    Optional<Product> getProductById(final String id);
+    Optional<Product> updateProduct(final String id, final ProductDto productDto);
 }

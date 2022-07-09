@@ -30,9 +30,7 @@ public class FilterBuilderService {
         List<FilterCondition> filters = new ArrayList<>();
 
         try {
-
             if (criteria != null && !criteria.isEmpty()) {
-
                 final String FILTER_SHEARCH_DELIMITER = "&";
                 final String FILTER_CONDITION_DELIMITER = "\\|";
 
