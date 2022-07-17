@@ -198,5 +198,7 @@ All of state only continue to go ahead when each local transaction for each serv
 3. EKS -> To build K8S to host service as pods
 4. Cloudwatch to monitor logs
 5. ECR -> to storage docker image as registry
+### Devops recommandation
+1. Circle CI or GitOps
 
 
