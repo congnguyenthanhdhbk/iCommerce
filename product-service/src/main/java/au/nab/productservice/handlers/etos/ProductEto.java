@@ -1,7 +1,10 @@
 package au.nab.productservice.handlers.etos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import com.google.gson.GsonBuilder;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -9,7 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Data
-@ToString
 public class ProductEto {
     @JsonProperty(value = "id")
     private String id;
@@ -27,4 +29,8 @@ public class ProductEto {
     private long quantity;
     @JsonProperty(value = "price")
     private BigDecimal price;
+
+    public String toString() {
+        return new GsonBuilder().create().toJson(this);
+    }
 }

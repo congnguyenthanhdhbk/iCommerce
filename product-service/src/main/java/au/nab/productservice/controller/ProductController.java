@@ -4,6 +4,7 @@ import au.nab.productservice.dtos.ProductDto;
 import au.nab.productservice.dtos.http.PageResponse;
 import au.nab.productservice.dtos.http.ProductResponse;
 import au.nab.productservice.entities.Product;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +13,7 @@ import java.util.List;
 @RequestMapping(value = "/v1/products")
 public interface ProductController {
     @PostMapping()
-    ResponseEntity<ProductResponse> addProduct(final ProductDto product);
+    ResponseEntity<ProductResponse> addProduct(final ProductDto product) throws JsonProcessingException;
     @GetMapping()
     ResponseEntity<PageResponse<Product>> getSearchCriteriaPage(
             @RequestParam(value = "page", defaultValue = "0") int page,

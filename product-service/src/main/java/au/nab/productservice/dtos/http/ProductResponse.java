@@ -7,6 +7,9 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
+@Getter
+@Setter
 public class ProductResponse {
     private final String id;
     private final String name;

@@ -6,14 +6,18 @@ import au.nab.productservice.dtos.ProductDto;
 import au.nab.productservice.dtos.http.PageResponse;
 import au.nab.productservice.dtos.http.ProductResponse;
 import au.nab.productservice.entities.Product;
+import au.nab.productservice.handlers.etos.ProductEto;
 import au.nab.productservice.repository.support.GenericFilterCriteriaBuilder;
 import au.nab.productservice.service.FilterBuilderService;
 import au.nab.productservice.service.ProductService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,18 +28,36 @@ import java.util.Optional;
 
 @RestController
 public class ProductControllerImpl implements ProductController {
+    @Value("${product.topic.created}")
+    private String productCreatedTopic;
     private final ProductService productService;
+    private final KafkaTemplate<String, String> kafkaTemplate;
     private final FilterBuilderService filterBuilderService;
 
     public ProductControllerImpl(final ProductService productService,
-                                 final FilterBuilderService filterBuilderService) {
+                                 final FilterBuilderService filterBuilderService,
+                                 final KafkaTemplate<String, String> kafkaTemplate) {
         this.productService = productService;
         this.filterBuilderService = filterBuilderService;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     @Override
-    public ResponseEntity<ProductResponse> addProduct(@RequestBody() ProductDto product) {
+    public ResponseEntity<ProductResponse> addProduct(@RequestBody() ProductDto product) throws JsonProcessingException {
         final Optional<ProductResponse> response = productService.addProduct(product);
+
+        final ProductResponse productResponse = response.get();
+        final ProductEto productEto = ProductEto
+                .builder()
+                .name(productResponse.getName())
+                .brand(productResponse.getBrand())
+                .categories(productResponse.getCategories())
+                .colors(productResponse.getColors())
+                .description(productResponse.getDescription())
+                .price(productResponse.getPrice())
+                .quantity(productResponse.getQuantity())
+                .id(productResponse.getId()).build();
+        kafkaTemplate.send(productCreatedTopic, productEto.toString());
         return response.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.internalServerError().build());
     }
