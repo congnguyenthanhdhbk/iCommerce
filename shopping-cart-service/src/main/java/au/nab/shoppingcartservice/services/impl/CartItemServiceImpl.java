@@ -8,6 +8,7 @@ import au.nab.shoppingcartservice.exceptions.NotFoundException;
 import au.nab.shoppingcartservice.repositories.CartItemRepository;
 import au.nab.shoppingcartservice.repositories.ProductRepository;
 import au.nab.shoppingcartservice.services.CartItemService;
+import au.nab.shoppingcartservice.services.validation.CartItemValidation;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -20,24 +21,20 @@ import java.util.stream.Collectors;
 public class CartItemServiceImpl implements CartItemService {
     private final CartItemRepository cartItemRepository;
     private final ProductRepository productRepository;
+    private final CartItemValidation validation;
 
     public CartItemServiceImpl(final CartItemRepository cartItemRepository,
-                               final ProductRepository productRepository) {
+                               final ProductRepository productRepository,
+                               final CartItemValidation validation) {
         this.cartItemRepository = cartItemRepository;
         this.productRepository = productRepository;
+        this.validation = validation;
     }
 
     @Override
     public boolean addItemsToCart(final CartItemDto cartItemDto) throws NoItemValidException, NotFoundException {
         // Validate and filter invalid product
-        final List<String> productIds = cartItemDto
-                .getProductIds()
-                .stream()
-                .filter(productRepository::existsById)
-                .collect(Collectors.toList());
-        if (productIds.size() == 0) {
-            throw new NoItemValidException("No products is valid or exist");
-        }
+        final List<String> productIds = validation.checkValidProduct(cartItemDto.getProductIds());
         // Get list product
         final List<Product> products = (List<Product>) productRepository.findAllById(productIds);
         final long quantity = productIds.size();
@@ -53,7 +50,7 @@ public class CartItemServiceImpl implements CartItemService {
                         .quantity(quantity)
                         .productIds(productIds)
                 .build());
-        return false;
+        return true;
     }
 
     @Override
@@ -71,9 +68,9 @@ public class CartItemServiceImpl implements CartItemService {
         // Get list product
         final List<Product> products = (List<Product>) productRepository.findAllById(productIds);
         final long quantity = productIds.size();
-        BigDecimal totals = BigDecimal.valueOf(0);
+        int totals = 0;
         for (Product product : products) {
-            totals.add(product.getPrice());
+            totals += product.getPrice().intValue();
         }
 
         final Optional<CartItem> cartItem = cartItemRepository
@@ -83,7 +80,7 @@ public class CartItemServiceImpl implements CartItemService {
         }
         cartItem.get().setQuantity(quantity);
         cartItem.get().setProductIds(productIds);
-        cartItem.get().setTotals(totals);
+        cartItem.get().setTotals(BigDecimal.valueOf(totals));
         cartItemRepository.save(cartItem.get());
 
         return true;

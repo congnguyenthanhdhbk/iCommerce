@@ -57,4 +57,6 @@ This is a gradle project. However, you need to have installed:
   - Domain event - publish an event whenever data changes
   - Event sourcing - persist aggregates as a sequence of events
 # High level design
+
+![](/images/envent-service.drawio.png)
 # Database Design
