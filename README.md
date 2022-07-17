@@ -49,7 +49,7 @@ This is a gradle project. However, you need to have installed:
 - Deployment pattern
     - Service instance per container - Dockerfile and Dockercompose
     - Serverless deployment - deploy as service using serverless deployment platform
-    - Service deployment platform - deploy services using a highy automated platform that provides a service abstraction
+    - Service deployment platform - deploy services using a highly automated platform that provides a service abstraction
 - Transaction 
   - Saga orchestration
 - Data management
@@ -170,6 +170,14 @@ curl --location --request PUT 'http://localhost:8989/api/v1/carts/62d3f168b07d84
     ]
 }'
 ```
+# Coding structure
+In the project, I follow Hexagonal Architecture
+1. Controller to define how to external system communication with service
+2. Service to support for handle user case or business of the service or domain
+3. Repository define to interact with database
+4. Entity to define domain
+5. Handlers to define how to this service communication with external tools or opensource to send info from internal to external
+6. DTO and ETO to define the method to connect between service and domain or transferring message for connection with external system
 # TODO
 ## Saga orchestration
 ![](/images/saga.png)
