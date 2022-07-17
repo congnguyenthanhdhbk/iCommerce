@@ -173,4 +173,15 @@ curl --location --request PUT 'http://localhost:8989/api/v1/carts/62d3f168b07d84
 # TODO
 ## Saga orchestration
 ![](/images/saga.png)
+All of state only continue to go ahead when each local transaction for each service which is success.
+## API gateway
+1. Api gateway for app and web to support for front-end side
+2. Api gateway for operator to support for backend side
+## Backend internal service
+1. Inventory service: To manage available products which is already for order of customers
+2. Promotion service: To provide discount method as apply coupon, direct discount, loyalty etc
+3. Payment service: To handle for payment as connecting to bank, visa / master
+4. Order service: To handle for placing order of customers
+5. Search service: To support for customer who can use tool to query or recommendation matching product by applying elastic search
+
 
