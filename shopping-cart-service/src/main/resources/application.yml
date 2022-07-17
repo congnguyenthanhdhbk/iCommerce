@@ -1,0 +1,19 @@
+server:
+  port: ${PORT:8989}
+spring:
+  application:
+    name: ${APPLICATION_NAME:shopping-cart}
+  kafka:
+    consumer:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER:localhost:9092}
+      group-id: ${GROUP_ID:shopping-cart-id}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+      max-poll-records: 50
+      properties:
+        spring.json.trusted.packages: '*'
+  data:
+    mongodb:
+      uri: ${MONGO_URI:mongodb://localhost:27017/shoppingcart}
