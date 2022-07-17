@@ -60,3 +60,117 @@ This is a gradle project. However, you need to have installed:
 
 ![](/images/envent-service.drawio.png)
 # Database Design
+## Product service
+```
+{
+	"id" : "string",
+	"name" : "string",
+	"description" : "string",
+	"colors" : ["string"],
+	"brand" : "string",
+	"categories" : ["string"],
+	"quantity" : "number",
+	"price" : "number"
+}
+```
+## shopping cart service
+```
+{
+	"id" : "string",
+	"productIds" : [ "string" ],
+	"totals" : "number",
+	"userId" : "string",
+	"quantity" : "number",
+}
+```
+# API design
+## Product service
+### Add product
+```
+curl --location --request POST 'http://localhost:8082/v1/products' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "Áo thun Teeworld Why Fall In Love When You Can Fall Asleep Nam Nữ Unisex",
+    "description": "Chất liệu 100% cotton, co dãn và thấm hút mồ hôi tốt",
+    "colors": [
+        "Black",
+        "White"
+    ],
+    "brand": "Teeworld",
+    "categories": [
+        "Áo thun Teeworld Why Fall In Love When You Can Fall Asleep Nam Nữ Unisex"
+    ],
+    "price": 299000,
+    "quantity": 300
+}'
+```
+### Update product
+```
+curl --location --request PUT 'http://localhost:8082/v1/products/62c2f597876dc4651fd6aab7' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "Clothers",
+    "description": "Chất liệu 100% cotton, co dãn và thấm hút mồ hôi tốt",
+    "colors": [
+        "Black",
+        "White"
+    ],
+    "brand": "Teeworld",
+    "categories": [
+        "Áo thun Teeworld Why Fall In Love When You Can Fall Asleep Nam Nữ Unisex"
+    ],
+    "price": 299000,
+    "quantity": 300
+}'
+```
+### Get list product
+```
+curl --location --request GET 'http://localhost:8082/v1/products?page=0&size=20&filterAnd=name%7Clike%7CÁo&filterOr=&orders=name%7CDESC'
+```
+### Get product by id
+```
+curl --location --request GET 'http://localhost:8082/v1/products/62c2f597876dc4651fd6aab7' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "name": "Áo thun Teeworld Why Fall In Love When You Can Fall Asleep Nam Nữ Unisex",
+    "description": "Chất liệu 100% cotton, co dãn và thấm hút mồ hôi tốt",
+    "colors": [
+        "Black",
+        "White"
+    ],
+    "brand": "Teeworld",
+    "categories": [
+        "Áo thun Teeworld Why Fall In Love When You Can Fall Asleep Nam Nữ Unisex"
+    ],
+    "price": 299000,
+    "quantity": 300
+}'
+```
+## Shopping cart service
+### Add to cart
+```
+curl --location --request POST 'http://localhost:8989/api/v1/carts' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "productIds": [
+        "62d3dc46506d803efef5a045",
+        "62d3f12a506d803efef5a046"
+    ],
+    "userId": "1"
+}'
+```
+### Update cart
+```
+curl --location --request PUT 'http://localhost:8989/api/v1/carts/62d3f168b07d842067048193' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "productIds": [
+        "62d3dc46506d803efef5a045",
+        "62d3f12a506d803efef5a046"
+    ]
+}'
+```
+# TODO
+## Saga orchestration
+![](/images/saga.png)
+
