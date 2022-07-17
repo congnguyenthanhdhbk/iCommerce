@@ -191,5 +191,12 @@ All of state only continue to go ahead when each local transaction for each serv
 3. Payment service: To handle for payment as connecting to bank, visa / master
 4. Order service: To handle for placing order of customers
 5. Search service: To support for customer who can use tool to query or recommendation matching product by applying elastic search
+## Recommendation for build AWS
+### Service and tools to use for build infra
+1. API gateway -> to user rest api
+2. AppMesh -> A service mesh to balance traffic or monitoring
+3. EKS -> To build K8S to host service as pods
+4. Cloudwatch to monitor logs
+5. ECR -> to storage docker image as registry
 
 
